@@ -9,6 +9,7 @@ from subprocess import CalledProcessError, run
 
 import dotenv
 import rich
+from security import safe_command
 
 dotenv.load_dotenv()
 
@@ -55,7 +56,7 @@ def build():
         _install_frontend_dependencies()
 
         rich.print("\n[bold]Building the frontend[/bold]")
-        run([package_manager, "run", "build"], cwd=FRONTEND_DIR, check=True)
+        safe_command.run(run, [package_manager, "run", "build"], cwd=FRONTEND_DIR, check=True)
 
         if static_dir.exists():
             shutil.rmtree(static_dir)
@@ -234,7 +235,7 @@ def _install_frontend_dependencies():
     rich.print(
         f"\n[bold]Installing frontend dependencies using {package_manager.name}. It might take a while...[/bold]"
     )
-    run([package_manager, "install"], cwd=".frontend", check=True)
+    safe_command.run(run, [package_manager, "install"], cwd=".frontend", check=True)
 
 
 def _get_node_package_manager() -> NodePackageManager:

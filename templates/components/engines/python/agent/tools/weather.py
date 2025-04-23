@@ -3,8 +3,8 @@
 import logging
 
 import pytz  # type: ignore
-import requests  # type: ignore
 from llama_index.core.tools import FunctionTool
+from security import safe_requests
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class OpenMeteoWeather:
     def _get_geo_location(cls, location: str) -> dict:
         """Get geo location from location name."""
         params = {"name": location, "count": 10, "language": "en", "format": "json"}
-        response = requests.get(f"{cls.geo_api}/search", params=params)
+        response = safe_requests.get(f"{cls.geo_api}/search", params=params)
         if response.status_code != 200:
             raise Exception(f"Failed to fetch geo location: {response.status_code}")
         else:
@@ -62,7 +62,7 @@ class OpenMeteoWeather:
             "daily": "weather_code",
             "timezone": timezone,
         }
-        response = requests.get(f"{cls.weather_api}/forecast", params=params)
+        response = safe_requests.get(f"{cls.weather_api}/forecast", params=params)
         if response.status_code != 200:
             raise Exception(
                 f"Failed to fetch weather information: {response.status_code}"

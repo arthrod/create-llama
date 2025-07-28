@@ -4,8 +4,6 @@ import time
 import typing
 from io import BytesIO
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
-
-import requests
 from fastapi import BackgroundTasks
 from llama_cloud import ManagedIngestionStatus, PipelineFileCreateCustomMetadataValue
 from llama_index.core.schema import NodeWithScore
@@ -13,6 +11,7 @@ from pydantic import BaseModel
 
 from app.api.routers.models import SourceNodes
 from app.engine.index import get_client
+from security import safe_requests
 
 logger = logging.getLogger("uvicorn")
 
@@ -172,7 +171,7 @@ class LLamaCloudFileService:
         # Create directory if it doesn't exist
         os.makedirs(cls.LOCAL_STORE_PATH, exist_ok=True)
         # Download the file
-        with requests.get(url, stream=True) as r:
+        with safe_requests.get(url, stream=True) as r:
             r.raise_for_status()
             with open(local_file_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):

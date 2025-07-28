@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple
 
 from llama_index.tools.openapi import OpenAPIToolSpec
 from llama_index.tools.requests import RequestsToolSpec
+from security import safe_requests
 
 
 class OpenAPIActionToolSpec(OpenAPIToolSpec, RequestsToolSpec):
@@ -49,9 +50,8 @@ class OpenAPIActionToolSpec(OpenAPIToolSpec, RequestsToolSpec):
         import yaml  # type: ignore
 
         if uri.startswith("http"):
-            import requests  # type: ignore
 
-            response = requests.get(uri)
+            response = safe_requests.get(uri)
             if response.status_code != 200:
                 raise ValueError(
                     "Could not initialize OpenAPIActionToolSpec: "

@@ -74,7 +74,7 @@ class ImageGeneratorTool:
             headers=headers,
             files={"none": ""},
             data=data,
-        )
+        timeout=60)
         response.raise_for_status()
 
         return response

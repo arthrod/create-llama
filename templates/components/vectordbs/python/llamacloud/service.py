@@ -172,7 +172,7 @@ class LLamaCloudFileService:
         # Create directory if it doesn't exist
         os.makedirs(cls.LOCAL_STORE_PATH, exist_ok=True)
         # Download the file
-        with requests.get(url, stream=True) as r:
+        with requests.get(url, stream=True, timeout=60) as r:
             r.raise_for_status()
             with open(local_file_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):

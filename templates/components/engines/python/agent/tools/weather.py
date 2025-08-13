@@ -17,7 +17,7 @@ class OpenMeteoWeather:
     def _get_geo_location(cls, location: str) -> dict:
         """Get geo location from location name."""
         params = {"name": location, "count": 10, "language": "en", "format": "json"}
-        response = requests.get(f"{cls.geo_api}/search", params=params)
+        response = requests.get(f"{cls.geo_api}/search", params=params, timeout=60)
         if response.status_code != 200:
             raise Exception(f"Failed to fetch geo location: {response.status_code}")
         else:
@@ -62,7 +62,7 @@ class OpenMeteoWeather:
             "daily": "weather_code",
             "timezone": timezone,
         }
-        response = requests.get(f"{cls.weather_api}/forecast", params=params)
+        response = requests.get(f"{cls.weather_api}/forecast", params=params, timeout=60)
         if response.status_code != 200:
             raise Exception(
                 f"Failed to fetch weather information: {response.status_code}"

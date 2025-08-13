@@ -51,7 +51,7 @@ class OpenAPIActionToolSpec(OpenAPIToolSpec, RequestsToolSpec):
         if uri.startswith("http"):
             import requests  # type: ignore
 
-            response = requests.get(uri)
+            response = requests.get(uri, timeout=60)
             if response.status_code != 200:
                 raise ValueError(
                     "Could not initialize OpenAPIActionToolSpec: "
